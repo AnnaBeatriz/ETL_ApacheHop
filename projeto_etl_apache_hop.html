@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Prático ETL com Apache Hop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        
+        h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #2a5298;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        h4 {
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            display: block;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .inline-code {
+            background: #e9ecef;
+            color: #d63384;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            display: inline;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #856404;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #155724;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .architecture-diagram {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .flow-box {
+            display: inline-block;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .source {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .transform {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .destination {
+            background: #28a745;
+            color: white;
+        }
+        
+        .arrow {
+            font-size: 2em;
+            color: #667eea;
+            margin: 0 10px;
+        }
+        
+        footer {
+            background: #2d2d2d;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Projeto Prático ETL com Apache Hop</h1>
+            <p>Da Fonte de Dados ao Data Warehouse - Um Guia Completo</p>
+        </header>
+        
+        <div class="content">
+            <!-- Seção 1: Visão Geral -->
+            <div class="section">
+                <h2>📋 Visão Geral do Projeto</h2>
+                <p>Este projeto prático demonstra como criar um processo completo de ETL usando o Apache Hop, incluindo:</p>
+                <ul>
+                    <li>Extração de dados de arquivos CSV</li>
+                    <li>Transformações e agregações de dados</li>
+                    <li>Carga de dados refinados no PostgreSQL (Data Warehouse)</li>
+                    <li>Leitura, transformação e recarga de dados do DW</li>
+                </ul>
+                
+                <div class="architecture-diagram">
+                    <h3>Arquitetura do Projeto</h3>
+                    <div>
+                        <div class="flow-box source">CSV Files</div>
+                        <span class="arrow">→</span>
+                        <div class="flow-box transform">Apache Hop Pipeline</div>
+                        <span class="arrow">→</span>
+                        <div class="flow-box destination">PostgreSQL DW</div>
+                        <span class="arrow">→</span>
+                        <div class="flow-box transform">Transformação 2</div>
+                        <span class="arrow">→</span>
+                        <div class="flow-box destination">DW Refinado</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção 2: Arquivos de Dados -->
+            <div class="section">
+                <h2>📁 Preparação dos Arquivos de Dados</h2>
+                
+                <h3>Arquivo 1: vendas.csv</h3>
+                <p>Crie um arquivo chamado <span class="inline-code">vendas.csv</span> na pasta <span class="inline-code">C:\dados\fonte\</span> com o seguinte conteúdo:</p>
+                <code>id_venda,data_venda,id_produto,quantidade,preco_unitario,id_cliente,id_vendedor
+1,2024-01-15,101,5,25.50,1001,201
+2,2024-01-15,102,3,45.00,1002,202
+3,2024-01-16,101,2,25.50,1003,201
+4,2024-01-16,103,10,15.75,1001,203
+5,2024-01-17,102,7,45.00,1004,202
+6,2024-01-17,104,4,32.00,1005,201
+7,2024-01-18,101,6,25.50,1002,203
+8,2024-01-18,105,1,120.00,1006,202
+9,2024-01-19,103,8,15.75,1001,201
+10,2024-01-19,102,5,45.00,1003,203
+11,2024-01-20,104,3,32.00,1007,202
+12,2024-01-20,101,9,25.50,1004,201</code>
+                
+                <h3>Arquivo 2: produtos.csv</h3>
+                <p>Crie um arquivo chamado <span class="inline-code">produtos.csv</span> na pasta <span class="inline-code">C:\dados\fonte\</span> com o seguinte conteúdo:</p>
+                <code>id_produto,nome_produto,categoria,fornecedor
+101,Notebook Dell,Informática,Fornecedor A
+102,Mouse Logitech,Informática,Fornecedor B
+103,Teclado Mecânico,Informática,Fornecedor A
+104,Monitor LG 24,Informática,Fornecedor C
+105,Webcam HD,Informática,Fornecedor B</code>
+                
+                <h3>Arquivo 3: clientes.csv</h3>
+                <p>Crie um arquivo chamado <span class="inline-code">clientes.csv</span> na pasta <span class="inline-code">C:\dados\fonte\</span> com o seguinte conteúdo:</p>
+                <code>id_cliente,nome_cliente,cidade,estado,segmento
+1001,João Silva,São Paulo,SP,Corporativo
+1002,Maria Santos,Rio de Janeiro,RJ,Varejo
+1003,Pedro Oliveira,Belo Horizonte,MG,Corporativo
+1004,Ana Costa,Curitiba,PR,Varejo
+1005,Carlos Souza,Porto Alegre,RS,Corporativo
+1006,Juliana Lima,Brasília,DF,Governo
+1007,Roberto Alves,Salvador,BA,Varejo</code>
+                
+                <div class="info-box">
+                    <strong>📌 Importante:</strong> Certifique-se de que a pasta <span class="inline-code">C:\dados\fonte\</span> existe. Crie-a se necessário.
+                </div>
+            </div>
+            
+            <!-- Seção 3: Configuração do PostgreSQL -->
+            <div class="section">
+                <h2>🗄️ Configuração do PostgreSQL (Data Warehouse)</h2>
+                
+                <h3>Criar o Database e as Tabelas</h3>
+                <p>Execute os seguintes comandos SQL no PostgreSQL:</p>
+                
+                <h4>1. Criar o Database</h4>
+                <code>CREATE DATABASE dw_vendas;</code>
+                
+                <h4>2. Conectar ao Database e Criar as Tabelas</h4>
+                <code>-- Tabela de Vendas Refinadas
+CREATE TABLE vendas_refinadas (
+    id_venda INTEGER PRIMARY KEY,
+    data_venda DATE,
+    ano INTEGER,
+    mes INTEGER,
+    trimestre INTEGER,
+    id_produto INTEGER,
+    nome_produto VARCHAR(100),
+    categoria VARCHAR(50),
+    quantidade INTEGER,
+    preco_unitario DECIMAL(10,2),
+    valor_total DECIMAL(10,2),
+    id_cliente INTEGER,
+    nome_cliente VARCHAR(100),
+    cidade VARCHAR(100),
+    estado VARCHAR(2),
+    segmento VARCHAR(50),
+    id_vendedor INTEGER
+);
+
+-- Tabela de Agregação de Vendas por Produto
+CREATE TABLE vendas_por_produto (
+    id_produto INTEGER PRIMARY KEY,
+    nome_produto VARCHAR(100),
+    categoria VARCHAR(50),
+    total_quantidade INTEGER,
+    total_vendas DECIMAL(12,2),
+    numero_transacoes INTEGER,
+    ticket_medio DECIMAL(10,2)
+);
+
+-- Tabela de Agregação de Vendas por Cliente
+CREATE TABLE vendas_por_cliente (
+    id_cliente INTEGER PRIMARY KEY,
+    nome_cliente VARCHAR(100),
+    cidade VARCHAR(100),
+    estado VARCHAR(2),
+    segmento VARCHAR(50),
+    total_compras DECIMAL(12,2),
+    numero_pedidos INTEGER,
+    ticket_medio DECIMAL(10,2),
+    classificacao VARCHAR(20)
+);
+
+-- Tabela de Vendas Mensais
+CREATE TABLE vendas_mensais (
+    ano INTEGER,
+    mes INTEGER,
+    total_vendas DECIMAL(12,2),
+    total_quantidade INTEGER,
+    numero_transacoes INTEGER,
+    ticket_medio DECIMAL(10,2),
+    PRIMARY KEY (ano, mes)
+);</code>
+            </div>
+            
+            <!-- Seção 4: Apache Hop - Pipeline 1 -->
+            <div class="section">
+                <h2>⚙️ Apache Hop - Pipeline 1: Extração e Carga Inicial</h2>
+                
+                <h3>Objetivo</h3>
+                <p>Ler os arquivos CSV, fazer transformações e carregar os dados refinados no PostgreSQL.</p>
+                
+                <div class="step">
+                    <h4><span class="step-number">1</span>Criar Nova Pipeline</h4>
+                    <ol>
+                        <li>Abra o Apache Hop GUI</li>
+                        <li>Clique em <strong>File → New → Pipeline</strong></li>
+                        <li>Salve como: <span class="inline-code">pipeline_vendas_inicial.hpl</span></li>
+                    </ol>
+                </div>
+                
+                <div class="step">
+                    <h4><span class="step-number">2</span>Configurar Conexão com PostgreSQL</h4>
+                    <ol>
+                        <li>No painel lateral esquerdo, clique em <strong>Metadata</strong></li>
+                        <li>Clique com botão direito em <strong>Relational Database Connection</strong></li>
+                        <li>Selecione <strong>New</strong></li>
+                        <li>Configure a conexão:
+                            <ul>
+                                <li><strong>Connection name:</strong> postgres_dw</li>
+                                <li><strong>Connection type:</strong> PostgreSQL</li>
+                                <li><strong>Host name:</strong> localhost</li>
+                                <li><strong>Database name:</strong> dw_vendas</li>
+                                <li><strong>Port number:</strong> 5432</li>
+                                <li><strong>Username:</strong> postgres (ou seu usuário)</li>
+                                <li><strong>Password:</strong> sua senha</li>
+                            </ul>
+                        </li>
+                        <li>Clique em <strong>Test</strong> para testar a conexão</li>
+                        <li>Clique em <strong>OK</strong> para salvar</li>
+                    </ol>
+                </div>
+                
+                <div class="step">
+                    <h4><span class="step-number">3</span>Adicionar Transforms (Steps)</h4>
+                    
+                    <h4>3.1 - CSV File Input: Ler Vendas</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>CSV file input</strong> do painel Input para a área de trabalho</li>
+                        <li>Duplo clique para configurar:
+                            <ul>
+                                <li><strong>Transform name:</strong> Ler_Vendas</li>
+                                <li><strong>Filename:</strong> C:\dados\fonte\vendas.csv</li>
+                                <li><strong>Delimiter:</strong> , (vírgula)</li>
+                                <li><strong>Enclosure:</strong> " (aspas)</li>
+                                <li>Aba <strong>Fields</strong>, clique em <strong>Get Fields</strong></li>
+                                <li>Ajuste os tipos de dados:
+                                    <ul>
+                                        <li>id_venda: Integer</li>
+                                        <li>data_venda: Date (formato: yyyy-MM-dd)</li>
+                                        <li>id_produto: Integer</li>
+                                        <li>quantidade: Integer</li>
+                                        <li>preco_unitario: Number</li>
+                                        <li>id_cliente: Integer</li>
+                                        <li>id_vendedor: Integer</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>3.2 - CSV File Input: Ler Produtos</h4>
+                    <ul>
+                        <li>Adicione outro <strong>CSV file input</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Ler_Produtos</li>
+                                <li><strong>Filename:</strong> C:\dados\fonte\produtos.csv</li>
+                                <li>Clique em <strong>Get Fields</strong></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>3.3 - CSV File Input: Ler Clientes</h4>
+                    <ul>
+                        <li>Adicione outro <strong>CSV file input</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Ler_Clientes</li>
+                                <li><strong>Filename:</strong> C:\dados\fonte\clientes.csv</li>
+                                <li>Clique em <strong>Get Fields</strong></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>3.4 - Merge Join: Juntar Vendas com Produtos</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>Merge join</strong> do painel Joins</li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Join_Vendas_Produtos</li>
+                                <li><strong>First step:</strong> Ler_Vendas</li>
+                                <li><strong>Second step:</strong> Ler_Produtos</li>
+                                <li><strong>Keys for 1st step:</strong> id_produto</li>
+                                <li><strong>Keys for 2nd step:</strong> id_produto</li>
+                                <li><strong>Join type:</strong> INNER</li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Ler_Vendas</strong> ao <strong>Join_Vendas_Produtos</strong></li>
+                        <li>Conecte <strong>Ler_Produtos</strong> ao <strong>Join_Vendas_Produtos</strong></li>
+                    </ul>
+                    
+                    <h4>3.5 - Merge Join: Juntar com Clientes</h4>
+                    <ul>
+                        <li>Adicione outro <strong>Merge join</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Join_Com_Clientes</li>
+                                <li><strong>First step:</strong> Join_Vendas_Produtos</li>
+                                <li><strong>Second step:</strong> Ler_Clientes</li>
+                                <li><strong>Keys for 1st step:</strong> id_cliente</li>
+                                <li><strong>Keys for 2nd step:</strong> id_cliente</li>
+                                <li><strong>Join type:</strong> INNER</li>
+                            </ul>
+                        </li>
+                        <li>Conecte os transforms anteriores</li>
+                    </ul>
+                    
+                    <h4>3.6 - Calculator: Calcular Valor Total</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>Calculator</strong> do painel Transform</li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Calcular_Valor_Total</li>
+                                <li>Adicione um cálculo:
+                                    <ul>
+                                        <li><strong>New field:</strong> valor_total</li>
+                                        <li><strong>Calculation:</strong> A * B (Multiply)</li>
+                                        <li><strong>Field A:</strong> quantidade</li>
+                                        <li><strong>Field B:</strong> preco_unitario</li>
+                                        <li><strong>Value type:</strong> Number</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Join_Com_Clientes</strong> ao <strong>Calcular_Valor_Total</strong></li>
+                    </ul>
+                    
+                    <h4>3.7 - Calculator: Extrair Ano, Mês, Trimestre</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>Calculator</strong> do painel Transform</li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Extrair_Data_Partes</li>
+                                <li>Adicione os cálculos:
+                                    <ul>
+                                        <li><strong>New field:</strong> ano, <strong>Calculation:</strong> Year of date A, <strong>Field A:</strong> data_venda</li>
+                                        <li><strong>New field:</strong> mes, <strong>Calculation:</strong> Month of date A, <strong>Field A:</strong> data_venda</li>
+                                        <li><strong>New field:</strong> trimestre, <strong>Calculation:</strong> Quarter of date A, <strong>Field A:</strong> data_venda</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Calcular_Valor_Total</strong> ao <strong>Extrair_Data_Partes</strong></li>
+                    </ul>
+                    
+                    <h4>3.8 - Select values: Selecionar e Ordenar Campos</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>Select values</strong> do painel Transform</li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Selecionar_Campos</li>
+                                <li>Aba <strong>Select & Alter</strong>, selecione os campos na ordem:
+                                    <ul>
+                                        <li>id_venda, data_venda, ano, mes, trimestre</li>
+                                        <li>id_produto, nome_produto, categoria</li>
+                                        <li>quantidade, preco_unitario, valor_total</li>
+                                        <li>id_cliente, nome_cliente, cidade, estado, segmento</li>
+                                        <li>id_vendedor</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Extrair_Data_Partes</strong> ao <strong>Selecionar_Campos</strong></li>
+                    </ul>
+                    
+                    <h4>3.9 - Table output: Gravar no PostgreSQL</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>Table output</strong> do painel Output</li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Gravar_Vendas_Refinadas</li>
+                                <li><strong>Connection:</strong> postgres_dw</li>
+                                <li><strong>Target schema:</strong> public</li>
+                                <li><strong>Target table:</strong> vendas_refinadas</li>
+                                <li>Marque <strong>Truncate table</strong> (para limpar antes de inserir)</li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Selecionar_Campos</strong> ao <strong>Gravar_Vendas_Refinadas</strong></li>
+                    </ul>
+                </div>
+                
+                <div class="success-box">
+                    <strong>✅ Pipeline 1 Completa!</strong> Salve a pipeline e teste executando com F8 ou clicando no botão Run.
+                </div>
+            </div>
+            
+            <!-- Seção 5: Apache Hop - Pipeline 2 -->
+            <div class="section">
+                <h2>⚙️ Apache Hop - Pipeline 2: Agregações e Análises</h2>
+                
+                <h3>Objetivo</h3>
+                <p>Ler os dados refinados do DW, criar agregações e gravar as tabelas analíticas.</p>
+                
+                <div class="step">
+                    <h4><span class="step-number">1</span>Criar Nova Pipeline</h4>
+                    <ol>
+                        <li>Clique em <strong>File → New → Pipeline</strong></li>
+                        <li>Salve como: <span class="inline-code">pipeline_agregacoes.hpl</span></li>
+                    </ol>
+                </div>
+                
+                <div class="step">
+                    <h4><span class="step-number">2</span>Pipeline: Agregação por Produto</h4>
+                    
+                    <h4>2.1 - Table input: Ler Vendas Refinadas</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>Table input</strong> do painel Input</li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Ler_Vendas_DW</li>
+                                <li><strong>Connection:</strong> postgres_dw</li>
+                                <li><strong>SQL:</strong>
+                                    <code>SELECT 
+    id_produto,
+    nome_produto,
+    categoria,
+    quantidade,
+    valor_total
+FROM vendas_refinadas</code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>2.2 - Group by: Agregar por Produto</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>Group by</strong> do painel Statistics</li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Agregar_Por_Produto</li>
+                                <li><strong>Group by fields:</strong>
+                                    <ul>
+                                        <li>id_produto</li>
+                                        <li>nome_produto</li>
+                                        <li>categoria</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Aggregates:</strong>
+                                    <ul>
+                                        <li><strong>Name:</strong> total_quantidade, <strong>Subject:</strong> quantidade, <strong>Type:</strong> Sum</li>
+                                        <li><strong>Name:</strong> total_vendas, <strong>Subject:</strong> valor_total, <strong>Type:</strong> Sum</li>
+                                        <li><strong>Name:</strong> numero_transacoes, <strong>Subject:</strong> id_produto, <strong>Type:</strong> Number of Values (N)</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Ler_Vendas_DW</strong> ao <strong>Agregar_Por_Produto</strong></li>
+                    </ul>
+                    
+                    <h4>2.3 - Calculator: Calcular Ticket Médio</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>Calculator</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Calcular_Ticket_Medio_Produto</li>
+                                <li>Adicione um cálculo:
+                                    <ul>
+                                        <li><strong>New field:</strong> ticket_medio</li>
+                                        <li><strong>Calculation:</strong> A / B (Divide)</li>
+                                        <li><strong>Field A:</strong> total_vendas</li>
+                                        <li><strong>Field B:</strong> numero_transacoes</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Agregar_Por_Produto</strong> ao <strong>Calcular_Ticket_Medio_Produto</strong></li>
+                    </ul>
+                    
+                    <h4>2.4 - Table output: Gravar Agregação por Produto</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>Table output</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Gravar_Vendas_Por_Produto</li>
+                                <li><strong>Connection:</strong> postgres_dw</li>
+                                <li><strong>Target table:</strong> vendas_por_produto</li>
+                                <li>Marque <strong>Truncate table</strong></li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Calcular_Ticket_Medio_Produto</strong> ao <strong>Gravar_Vendas_Por_Produto</strong></li>
+                    </ul>
+                </div>
+                
+                <div class="step">
+                    <h4><span class="step-number">3</span>Pipeline: Agregação por Cliente</h4>
+                    
+                    <h4>3.1 - Table input: Ler Vendas para Cliente</h4>
+                    <ul>
+                        <li>Adicione outro <strong>Table input</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Ler_Vendas_Cliente</li>
+                                <li><strong>Connection:</strong> postgres_dw</li>
+                                <li><strong>SQL:</strong>
+                                    <code>SELECT 
+    id_cliente,
+    nome_cliente,
+    cidade,
+    estado,
+    segmento,
+    valor_total
+FROM vendas_refinadas</code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>3.2 - Group by: Agregar por Cliente</h4>
+                    <ul>
+                        <li>Adicione <strong>Group by</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Agregar_Por_Cliente</li>
+                                <li><strong>Group by fields:</strong> id_cliente, nome_cliente, cidade, estado, segmento</li>
+                                <li><strong>Aggregates:</strong>
+                                    <ul>
+                                        <li><strong>Name:</strong> total_compras, <strong>Subject:</strong> valor_total, <strong>Type:</strong> Sum</li>
+                                        <li><strong>Name:</strong> numero_pedidos, <strong>Subject:</strong> id_cliente, <strong>Type:</strong> Number of Values (N)</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Ler_Vendas_Cliente</strong> ao <strong>Agregar_Por_Cliente</strong></li>
+                    </ul>
+                    
+                    <h4>3.3 - Calculator: Ticket Médio e Classificação</h4>
+                    <ul>
+                        <li>Adicione <strong>Calculator</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Calcular_Metricas_Cliente</li>
+                                <li>Cálculo: ticket_medio = total_compras / numero_pedidos</li>
+                            </ul>
+                        </li>
+                        <li>Conecte ao transform anterior</li>
+                    </ul>
+                    
+                    <h4>3.4 - Number Range: Classificar Cliente</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>Number Range</strong> do painel Transform</li>
+                        <li>Configure classificação:
+                            <li><strong>Transform name:</strong> Classificar_Cliente</li>
+
+                            <ul>
+                                <li>total_compras >= 500: "VIP"</li>
+                                <li>total_compras >= 200: "Premium"</li>
+                                <li>total_compras < 200: "Regular"</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>3.5 - Formula: Outra forma de Adicionar Classificação (Opcional)</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>Formula</strong> do painel Scripting</li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Classificar_Cliente</li>
+                                <li><strong>Field name:</strong> classificacao</li>
+                                <li><strong>Formula:</strong>
+                                    <code>IF([total_compras] >= 500, "VIP", IF([total_compras] >= 200, "Premium", "Regular"))</code>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Calcular_Metricas_Cliente</strong> ao <strong>Classificar_Cliente</strong></li>
+                    </ul>
+                    
+                    <h4>3.6 - Table output: Gravar Agregação por Cliente</h4>
+                    <ul>
+                        <li>Adicione <strong>Table output</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Gravar_Vendas_Por_Cliente</li>
+                                <li><strong>Connection:</strong> postgres_dw</li>
+                                <li><strong>Target table:</strong> vendas_por_cliente</li>
+                                <li>Marque <strong>Truncate table</strong></li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Classificar_Cliente</strong> ao <strong>Gravar_Vendas_Por_Cliente</strong></li>
+                    </ul>
+                </div>
+                
+                <div class="step">
+                    <h4><span class="step-number">4</span>Pipeline: Agregação Mensal</h4>
+                    
+                    <h4>4.1 - Table input: Ler para Agregação Mensal</h4>
+                    <ul>
+                        <li>Adicione <strong>Table input</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Ler_Vendas_Mensal</li>
+                                <li><strong>SQL:</strong>
+                                    <code>SELECT ano, mes, id_venda, valor_total, quantidade FROM vendas_refinadas</code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>4.2 - Group by: Agregar por Mês</h4>
+                    <ul>
+                        <li>Adicione <strong>Group by</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Agregar_Por_Mes</li>
+                                <li><strong>Group by:</strong> ano, mes</li>
+                                <li><strong>Aggregates:</strong>
+                                    <ul>
+                                        <li>total_vendas (Sum de valor_total)</li>
+                                        <li>total_quantidade (Sum de quantidade)</li>
+                                        <li>numero_transacoes (Number of Distinct Values (N))</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>4.3 - Calculator: Ticket Médio Mensal</h4>
+                    <ul>
+                        <li>Adicione <strong>Calculator</strong></li>
+                        <li><strong>Transform name:</strong> Calcular_Ticket_Medio_Mensal</li>
+                        <li>Configure: ticket_medio = total_vendas / numero_transacoes</li>
+                    </ul>
+                    
+                    <h4>4.4 - Table output: Gravar Vendas Mensais</h4>
+                    <ul>
+                        <li>Adicione <strong>Table output</strong></li>
+                        <li><strong>Transform name:</strong> Gravar_Vendas_Mensais</li>
+                        <li>Configure:
+
+
+                            <ul>
+                                <li><strong>Target table:</strong> vendas_mensais</li>
+                                <li>Marque <strong>Truncate table</strong></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="success-box">
+                    <strong>✅ Pipeline 2 Completa!</strong> Esta pipeline cria três tabelas agregadas no DW.
+                </div>
+            </div>
+            
+            <!-- Seção 6: Workflow -->
+            <div class="section">
+                <h2>🔄 Apache Hop - Workflow: Orquestrando as Pipelines</h2>
+                
+                <h3>Objetivo</h3>
+                <p>Criar um workflow que execute as pipelines na ordem correta.</p>
+                
+                <div class="step">
+                    <h4><span class="step-number">1</span>Criar Novo Workflow</h4>
+                    <ol>
+                        <li>Clique em <strong>File → New → Workflow</strong></li>
+                        <li>Salve como: <span class="inline-code">workflow_etl_completo.hwf</span></li>
+                    </ol>
+                </div>
+                
+                <div class="step">
+                    <h4><span class="step-number">2</span>Adicionar Actions ao Workflow</h4>
+                    
+                    <h4>2.1 - Start</h4>
+                    <ul>
+                        <li>Arraste a action <strong>Start</strong> do painel General</li>
+                    </ul>
+                    
+                    <h4>2.2 - Pipeline (Vendas Inicial)</h4>
+                    <ul>
+                        <li>Arraste a action <strong>Pipeline</strong> do painel General</li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Action name:</strong> Executar_Pipeline_Inicial</li>
+                                <li><strong>Pipeline filename:</strong> Selecione pipeline_vendas_inicial.hpl</li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Start</strong> a esta action</li>
+                    </ul>
+                    
+                    <h4>2.3 - Pipeline (Agregações)</h4>
+                    <ul>
+                        <li>Adicione outra action <strong>Pipeline</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Action name:</strong> Executar_Pipeline_Agregacoes</li>
+                                <li><strong>Pipeline filename:</strong> Selecione pipeline_agregacoes.hpl</li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Executar_Pipeline_Inicial</strong> a esta action (com seta verde de sucesso)</li>
+                    </ul>
+                    
+                    <h4>2.4 - SQL (Verificação)</h4>
+                    <ul>
+                        <li>Arraste a action <strong>SQL</strong> do painel Scripting</li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Action name:</strong> Verificar_Dados</li>
+                                <li><strong>Connection:</strong> postgres_dw</li>
+                                <li><strong>SQL Script:</strong>
+                                    <code>-- Verificar contagens
+SELECT 'vendas_refinadas' as tabela, COUNT(*) as total FROM vendas_refinadas
+UNION ALL
+SELECT 'vendas_por_produto', COUNT(*) FROM vendas_por_produto
+UNION ALL
+SELECT 'vendas_por_cliente', COUNT(*) FROM vendas_por_cliente
+UNION ALL
+SELECT 'vendas_mensais', COUNT(*) FROM vendas_mensais;</code>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Conecte <strong>Executar_Pipeline_Agregacoes</strong> a esta action</li>
+                    </ul>
+                    
+                    <h4>2.5 - Success</h4>
+                    <ul>
+                        <li>Arraste a action <strong>Success</strong> do painel General</li>
+                        <li>Conecte <strong>Verificar_Dados</strong> ao <strong>Success</strong></li>
+                    </ul>
+                </div>
+                
+                <div class="success-box">
+                    <strong>✅ Workflow Completo!</strong> Execute o workflow com F8 para processar todo o ETL.
+                </div>
+            </div>
+            
+            <!-- Seção 7: Pipeline 3 - Leitura e Refinamento -->
+            <div class="section">
+                <h2>⚙️ Apache Hop - Pipeline 3: Leitura e Novo Refinamento</h2>
+                
+                <h3>Objetivo</h3>
+                <p>Ler dados do DW, fazer novas transformações e atualizar as tabelas.</p>
+                
+                <div class="step">
+                    <h4><span class="step-number">1</span>Criar Nova Pipeline</h4>
+                    <ol>
+                        <li>Clique em <strong>File → New → Pipeline</strong></li>
+                        <li>Salve como: <span class="inline-code">pipeline_refinamento_adicional.hpl</span></li>
+                    </ol>
+                </div>
+                
+                <div class="step">
+                    <h4><span class="step-number">2</span>Adicionar Transforms</h4>
+                    
+                    <h4>2.1 - Table input: Ler Vendas Refinadas</h4>
+                    <ul>
+                        <li>Adicione <strong>Table input</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Ler_DW_Para_Refinar</li>
+                                <li><strong>SQL:</strong>
+                                    <code>SELECT * FROM vendas_refinadas</code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>2.2 - Calculator: Adicionar Margem de Lucro (20%)</h4>
+                    <ul>
+                        <li>Adicione <strong>Calculator</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Calcular_Margem</li>
+                                <li>Adicione cálculo:
+                                    <ul>
+                                        <li><strong>New field:</strong> margem_lucro</li>
+                                        <li><strong>Calculation:</strong> A * B (Multiply)</li>
+                                        <li><strong>Field A:</strong> valor_total</li>
+                                        <li><strong>Field B:</strong> Constant 0.20</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><strong>Nota:</strong> Para usar constante, primeiro use <strong>Add constants</strong> para criar um campo com valor 0.20</li>
+                    </ul>
+                    
+                    <h4>2.3 - Add constants: Adicionar Constante</h4>
+                    <ul>
+                        <li>Adicione <strong>Add constants</strong> antes do Calculator</li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Adicionar_Constante_Margem</li>
+                                <li><strong>Name:</strong> taxa_margem</li>
+                                <li><strong>Value:</strong> 0.20</li>
+                                <li><strong>Type:</strong> Number</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>2.4 - Calculator: Calcular Lucro e Receita Líquida</h4>
+                    <ul>
+                        <li>Adicione outro <strong>Calculator</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Calcular_Receita_Liquida</li>
+                                <li>Cálculo 1: lucro_estimado = valor_total * taxa_margem</li>
+                                <li>Cálculo 2: receita_liquida = valor_total - lucro_estimado</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>2.5 - Formula: Classificar por Performance</h4>
+                    <ul>
+                        <li>Adicione <strong>Formula</strong></li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Classificar_Performance</li>
+                                <li><strong>Field:</strong> performance_venda</li>
+                                <li><strong>Formula:</strong>
+                                    <code>IF(valor_total>=200;"Alta";IF(valor_total>=100;"Média";"Baixa"))</code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>2.6 - Update: Atualizar Registros no DW</h4>
+                    <ul>
+                        <li>Arraste o transform <strong>Insert / Update</strong> do painel Output</li>
+                        <li>Configure:
+                            <ul>
+                                <li><strong>Transform name:</strong> Atualizar_Vendas_Refinadas</li>
+                                <li><strong>Connection:</strong> postgres_dw</li>
+                                <li><strong>Target table:</strong> vendas_refinadas</li>
+                                <li><strong>Key field:</strong> id_venda</li>
+                                <li>Marque <strong>Update</strong> para os novos campos</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <div class="warning-box">
+                        <strong>⚠️ Nota:</strong> Como a tabela vendas_refinadas original não tem os campos novos (lucro_estimado, receita_liquida, performance_venda), você precisa alterar a tabela primeiro. Execute este SQL no PostgreSQL:
+                        <code>ALTER TABLE vendas_refinadas 
+ADD COLUMN lucro_estimado DECIMAL(10,2),
+ADD COLUMN receita_liquida DECIMAL(10,2),
+ADD COLUMN performance_venda VARCHAR(20);</code>
+                    </div>
+                </div>
+                
+                <div class="success-box">
+                    <strong>✅ Pipeline 3 Completa!</strong> Esta pipeline lê do DW, adiciona novos cálculos e atualiza os registros.
+                </div>
+            </div>
+            
+            <!-- Seção 8: Validação -->
+            <div class="section">
+                <h2>✅ Validação dos Resultados</h2>
+                
+                <h3>Consultas SQL para Verificação</h3>
+                
+                <h4>1. Verificar Vendas Refinadas</h4>
+                <code>SELECT * FROM vendas_refinadas LIMIT 10;</code>
+                
+                <h4>2. Verificar Agregação por Produto</h4>
+                <code>SELECT 
+    nome_produto,
+    categoria,
+    total_quantidade,
+    total_vendas,
+    ticket_medio
+FROM vendas_por_produto
+ORDER BY total_vendas DESC;</code>
+                
+                <h4>3. Verificar Agregação por Cliente</h4>
+                <code>SELECT 
+    nome_cliente,
+    segmento,
+    total_compras,
+    numero_pedidos,
+    classificacao
+FROM vendas_por_cliente
+ORDER BY total_compras DESC;</code>
+                
+                <h4>4. Verificar Vendas Mensais</h4>
+                <code>SELECT 
+    ano,
+    mes,
+    total_vendas,
+    numero_transacoes,
+    ticket_medio
+FROM vendas_mensais
+ORDER BY ano, mes;</code>
+                
+                <h4>5. Verificar Novos Campos Refinados</h4>
+                <code>SELECT 
+    id_venda,
+    nome_produto,
+    valor_total,
+    lucro_estimado,
+    receita_liquida,
+    performance_venda
+FROM vendas_refinadas
+ORDER BY valor_total DESC
+LIMIT 10;</code>
+            </div>
+            
+            <!-- Seção 9: Resumo do Fluxo -->
+            <div class="section">
+                <h2>📊 Resumo do Fluxo Completo</h2>
+                
+                <h3>Fluxo de Dados</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Etapa</th>
+                            <th>Ação</th>
+                            <th>Entrada</th>
+                            <th>Saída</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Pipeline Inicial</td>
+                            <td>CSV Files (vendas, produtos, clientes)</td>
+                            <td>vendas_refinadas (DW)</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Pipeline Agregações</td>
+                            <td>vendas_refinadas (DW)</td>
+                            <td>vendas_por_produto, vendas_por_cliente, vendas_mensais (DW)</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Pipeline Refinamento</td>
+                            <td>vendas_refinadas (DW)</td>
+                            <td>vendas_refinadas atualizada com novos campos (DW)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Transforms Utilizados</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Transform</th>
+                            <th>Categoria</th>
+                            <th>Função</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CSV file input</td>
+                            <td>Input</td>
+                            <td>Ler arquivos CSV</td>
+                        </tr>
+                        <tr>
+                            <td>Table input</td>
+                            <td>Input</td>
+                            <td>Ler dados de tabelas do banco</td>
+                        </tr>
+                        <tr>
+                            <td>Merge join</td>
+                            <td>Joins</td>
+                            <td>Juntar dados de diferentes fontes</td>
+                        </tr>
+                        <tr>
+                            <td>Calculator</td>
+                            <td>Transform</td>
+                            <td>Realizar cálculos matemáticos</td>
+                        </tr>
+                        <tr>
+                            <td>Group by</td>
+                            <td>Statistics</td>
+                            <td>Agregar dados com SUM, COUNT, etc.</td>
+                        </tr>
+                        <tr>
+                            <td>Formula</td>
+                            <td>Scripting</td>
+                            <td>Criar campos com fórmulas condicionais</td>
+                        </tr>
+                        <tr>
+                            <td>Select values</td>
+                            <td>Transform</td>
+                            <td>Selecionar e ordenar campos</td>
+                        </tr>
+                        <tr>
+                            <td>Add constants</td>
+                            <td>Transform</td>
+                            <td>Adicionar campos com valores constantes</td>
+                        </tr>
+                        <tr>
+                            <td>Table output</td>
+                            <td>Output</td>
+                            <td>Gravar dados em tabelas</td>
+                        </tr>
+                        <tr>
+                            <td>Insert / Update</td>
+                            <td>Output</td>
+                            <td>Inserir ou atualizar registros</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Seção 10: Dicas e Boas Práticas -->
+            <div class="section">
+                <h2>💡 Dicas e Boas Práticas</h2>
+                
+                <h3>Execução e Depuração</h3>
+                <ul>
+                    <li><strong>Preview de Dados:</strong> Clique com botão direito em qualquer transform e selecione "Preview" para ver os dados em tempo real</li>
+                    <li><strong>Logging:</strong> Configure logging nas pipelines para rastrear erros</li>
+                    <li><strong>Teste Incremental:</strong> Execute cada parte da pipeline separadamente antes de integrar tudo</li>
+                </ul>
+                
+                <h3>Performance</h3>
+                <ul>
+                    <li>Use <strong>Sort rows</strong> antes de <strong>Merge join</strong> quando necessário</li>
+                    <li>Configure o número de cópias (copies) em transforms pesados para paralelização</li>
+                    <li>Use <strong>Commit size</strong> apropriado no Table output (ex: 1000 registros)</li>
+                </ul>
+                
+                <h3>Manutenção</h3>
+                <ul>
+                    <li>Documente suas pipelines usando <strong>Notes</strong> (Transform → Misc → Add Note)</li>
+                    <li>Use nomes descritivos para transforms e arquivos</li>
+                    <li>Mantenha as conexões de banco centralizadas no metadata</li>
+                    <li>Versione seus arquivos .hpl e .hwf</li>
+                </ul>
+                
+                <h3>Segurança</h3>
+                <ul>
+                    <li>Use variáveis de ambiente para senhas (${DB_PASSWORD})</li>
+                    <li>Configure permissões adequadas no PostgreSQL</li>
+                    <li>Faça backup regular do DW</li>
+                </ul>
+            </div>
+            
+            <!-- Seção 11: Próximos Passos -->
+            <div class="section">
+                <h2>🚀 Próximos Passos e Melhorias</h2>
+                
+                <h3>Expansões Sugeridas</h3>
+                <ol>
+                    <li><strong>Dimensões Temporais:</strong> Criar uma tabela de dimensão de data completa</li>
+                    <li><strong>SCD Type 2:</strong> Implementar Slowly Changing Dimensions para histórico de clientes</li>
+                    <li><strong>Data Quality:</strong> Adicionar verificações de qualidade com filtros e validações</li>
+                    <li><strong>Erro Handling:</strong> Implementar tratamento de erros e registro de falhas</li>
+                    <li><strong>Incrementais:</strong> Modificar pipelines para processar apenas dados novos</li>
+                    <li><strong>Dashboards:</strong> Conectar ferramentas de BI (Power BI, Tableau, Metabase) ao DW</li>
+                    <li><strong>Agendamento:</strong> Usar scheduler do Apache Hop ou cron/task scheduler do Windows</li>
+                </ol>
+                
+                <h3>Outras Transformações Úteis</h3>
+                <ul>
+                    <li><strong>Filter rows:</strong> Filtrar dados baseado em condições</li>
+                    <li><strong>Sort rows:</strong> Ordenar dados antes de joins ou agregações</li>
+                    <li><strong>String operations:</strong> Manipular textos (upper, lower, trim, etc.)</li>
+                    <li><strong>Replace in string:</strong> Substituir valores em campos texto</li>
+                    <li><strong>Value mapper:</strong> Mapear valores de um campo para outro</li>
+                    <li><strong>Unique rows:</strong> Remover duplicatas</li>
+                    <li><strong>Dimension lookup/update:</strong> Gerenciar dimensões em um DW</li>
+                </ul>
+            </div>
+        </div>
+        
+        <footer>
+            <p><strong>Apache Hop ETL Project</strong></p>
+            <p>Desenvolvido como material de estudo para Engenharia de Dados</p>
+            <p>🔧 Apache Hop | 🐘 PostgreSQL | 📊 Data Warehouse</p>
+        </footer>
+    </div>
+</body>
+</html>

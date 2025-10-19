@@ -1,0 +1,41 @@
+id_cliente,nome_cliente,cidade,estado,segmento
+1001,João Silva,São Paulo,SP,Corporativo
+1002,Maria Santos,Rio de Janeiro,RJ,Varejo
+1003,Pedro Oliveira,Belo Horizonte,MG,Corporativo
+1004,Ana Costa,Curitiba,PR,Varejo
+1005,Carlos Souza,Porto Alegre,RS,Corporativo
+1006,Juliana Lima,Brasília,DF,Governo
+1007,Roberto Alves,Salvador,BA,Varejo
+1008,Fernanda Rodrigues,Fortaleza,CE,Corporativo
+1009,Lucas Martins,Recife,PE,Varejo
+1010,Patrícia Gomes,Manaus,AM,Governo
+1011,Ricardo Ferreira,Goiânia,GO,Corporativo
+1012,Camila Barbosa,Belém,PA,Varejo
+1013,Thiago Cardoso,Vitória,ES,Corporativo
+1014,Beatriz Pereira,Florianópolis,SC,Varejo
+1015,Gabriel Nascimento,São Luís,MA,Governo
+1016,Larissa Araújo,Maceió,AL,Corporativo
+1017,Rafael Moura,Campo Grande,MS,Varejo
+1018,Aline Ribeiro,João Pessoa,PB,Corporativo
+1019,Marcelo Dias,Teresina,PI,Varejo
+1020,Natália Freitas,Natal,RN,Governo
+1021,Bruno Castro,Aracaju,SE,Corporativo
+1022,Paula Monteiro,Cuiabá,MT,Varejo
+1023,Diego Carvalho,Palmas,TO,Corporativo
+1024,Mariana Lopes,Boa Vista,RR,Varejo
+1025,Vinícius Ramos,Macapá,AP,Governo
+1026,Tatiana Correia,Porto Velho,RO,Corporativo
+1027,Anderson Pinto,Rio Branco,AC,Varejo
+1028,Renata Teixeira,Campinas,SP,Corporativo
+1029,Felipe Azevedo,Guarulhos,SP,Varejo
+1030,Carolina Duarte,Niterói,RJ,Corporativo
+1031,Rodrigo Mendes,Contagem,MG,Varejo
+1032,Vanessa Rocha,Uberlândia,MG,Corporativo
+1033,Gustavo Nunes,Londrina,PR,Varejo
+1034,Daniela Cavalcanti,Maringá,PR,Corporativo
+1035,Eduardo Vieira,Caxias do Sul,RS,Governo
+1036,Priscila Santana,Joinville,SC,Corporativo
+1037,Alexandre Melo,Sorocaba,SP,Varejo
+1038,Adriana Farias,Ribeirão Preto,SP,Corporativo
+1039,Leandro Batista,Santo André,SP,Varejo
+1040,Cristina Campos,São Bernardo,SP,Governo

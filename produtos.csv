@@ -1,0 +1,11 @@
+id_produto,nome_produto,categoria,fornecedor
+101,Notebook Dell Inspiron 15,Informática,Fornecedor A
+102,Mouse Logitech MX Master,Informática,Fornecedor B
+103,Teclado Mecânico RGB,Informática,Fornecedor A
+104,Monitor LG 24 Ultrawide,Informática,Fornecedor C
+105,Webcam HD Logitech C920,Informática,Fornecedor B
+106,Headset Gamer HyperX,Informática,Fornecedor A
+107,Impressora HP LaserJet,Informática,Fornecedor D
+108,Mouse Pad Gamer XL,Informática,Fornecedor B
+109,SSD Kingston 480GB,Informática,Fornecedor C
+110,Notebook Lenovo ThinkPad,Informática,Fornecedor A
