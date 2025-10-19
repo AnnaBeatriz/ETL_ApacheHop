@@ -7,4 +7,4 @@ Este é um projeto prático completo de ETL (Extract, Transform, Load) utilizand
 - Extração de dados de arquivos CSV
 - Transformações e agregações de dados
 - Carga de dados refinados no PostgreSQL (Data Warehouse)
-- Leitura, transformação e recarga de dados do DW
+- Leitura, transformação e recarga de dados do DW.
